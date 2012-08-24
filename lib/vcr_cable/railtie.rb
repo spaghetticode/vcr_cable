@@ -5,6 +5,7 @@ module VcrCable
         cassette.name 'vcr_cable'
         cassette.options :record => :new_episodes
       end
+      VcrCable.configure_vcr
     end
   end
 end
