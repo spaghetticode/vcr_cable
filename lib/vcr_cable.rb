@@ -2,6 +2,8 @@ require 'vcr'
 require 'vcr_cable/railtie' if defined? Rails
 
 module VcrCable
+  CONFIG_FILE = 'vcr_cable.yml'
+
   def self.configure_vcr
     VCR.configure do |c|
       c.hook_into config['hook_into']
@@ -11,6 +13,6 @@ module VcrCable
   end
 
   def self.config
-    @config ||= YAML.load_file(Rails.root.join 'config/vcr_cable.yml')[Rails.env]
+    @config ||= YAML.load_file(Rails.root.join 'config', CONFIG_FILE)[Rails.env]
   end
 end
