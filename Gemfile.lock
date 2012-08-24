@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     vcr_cable (0.0.1)
-      rails (~> 3.2.0)
+      rails (~> 3.2.8)
       vcr (~> 2.0.0)
 
 GEM
