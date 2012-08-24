@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     vcr_cable (0.0.1)
+      fakeweb
       rails (~> 3.2.8)
       vcr (~> 2.0.0)
 
@@ -38,6 +39,7 @@ GEM
     arel (3.0.2)
     builder (3.0.0)
     erubis (2.7.0)
+    fakeweb (1.3.0)
     ffi (1.1.5)
     guard (1.3.2)
       listen (>= 0.4.2)
