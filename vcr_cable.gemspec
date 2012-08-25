@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = VcrCable::VERSION
   s.authors     = ["andrea longhi"]
   s.email       = ["andrea@spaghetticode.it"]
-  s.homepage    = "http://github.com/spaghetticode/vcr_cable"
+  s.homepage    = "https://github.com/spaghetticode/vcr_cable"
   s.summary     = "use VCR in development"
   s.description = "use VCR in development (or whatever Rails environment you want)"
 
