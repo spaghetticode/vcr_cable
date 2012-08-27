@@ -5,5 +5,5 @@ development:
 
 test:
   hook_into: fakeweb
-  cassette_library_dir: test_cassettes
+  cassette_library_dir: custom_named_cassettes
   allow_http_connections_when_no_cassette: false

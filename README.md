@@ -14,16 +14,28 @@ Add required gems to your Gemfile:
 gem 'vcr_cable'
 gem 'webmock' # or fakeweb
 ```
+Now all external requests will hit the remote servers only one time, and the
+application will subsequently use the recorded data.
 
-Generate the vcr_cable.yml file with default VCR config:
+
+## Custom VCR Configuration
+
+The default VCR configuration values are (extracted from ```lib/vcr_cable.rb```):
+
+```ruby
+  DEFAULT_CONFIG = {
+    'hook_into' => :fakeweb,
+    'cassette_library_dir' => 'development_cassettes',
+    'allow_http_connections_when_no_cassette' => true
+  }
+```
+
+If you want to override those values you can generate the vcr_cable.yml config
+file and edit its params:
 
 ```bash
 bundle exec rails generate vcr_cable
 ```
-
-Update config/vcr_cable.yml with your custom settings, if necessary. Now all
-external requests will hit the remote servers only one time, and the application
-will subsequently use the recorded data.
 
 
 ## Contributing
