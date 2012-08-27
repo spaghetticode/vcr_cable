@@ -1,5 +1,7 @@
 # VcrCable
 
+[![Build Status](https://secure.travis-ci.org/spaghetticode/vcr_cable.png)](http://travis-ci.org/spaghetticode/vcr_cable)
+
 This gem allows to use VCR in development. This is quite handy when your app
 interacts frequently with external services and you're on a sloppy connection,
 or when you want to save bandwidth, or when you happent to have no connection
