@@ -39,6 +39,8 @@ file and edit its params:
 bundle exec rails generate vcr_cable
 ```
 
+You will find the generated file in the ```config``` folder of your rails
+application.
 
 ## Contributing
 
