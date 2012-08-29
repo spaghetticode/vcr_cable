@@ -26,9 +26,11 @@ The default VCR configuration values are (extracted from ```lib/vcr_cable.rb```)
 
 ```ruby
   DEFAULT_CONFIG = {
-    'hook_into' => :fakeweb,
-    'cassette_library_dir' => 'development_cassettes',
-    'allow_http_connections_when_no_cassette' => true
+    'development' => {
+      'hook_into' => :fakeweb,
+      'cassette_library_dir' => 'development_cassettes',
+      'allow_http_connections_when_no_cassette' => true
+    }
   }
 ```
 
