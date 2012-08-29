@@ -26,27 +26,29 @@ The default VCR configuration values are (extracted from ```lib/vcr_cable.rb```)
 
 ```ruby
   DEFAULT_CONFIG = {
-    'hook_into' => :fakeweb,
-    'cassette_library_dir' => 'development_cassettes',
-    'allow_http_connections_when_no_cassette' => true
+    'development' => {
+      'hook_into' => :fakeweb,
+      'cassette_library_dir' => 'development_cassettes',
+      'allow_http_connections_when_no_cassette' => true
+    }
   }
 ```
 
-If you want to override those values you can generate the vcr_cable.yml config
-file and edit its params:
+If you want to override those values or configure vcr_cable to work in some
+other environment you can generate the vcr_cable.yml config file and update it:
 
 ```bash
 bundle exec rails generate vcr_cable
 ```
 
-You will find the generated file in the ```config``` folder of your rails
-application.
+The file will be located in the ```config``` folder of your rails application.
+
 
 ## Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Add your feature tests to the rspec/cucumber test suite
+3. Add your feature tests to the test suite
 4. Commit your changes (`git commit -am 'Added some feature'`)
 5. Push to the branch (`git push origin my-new-feature`)
 6. Create new Pull Request
