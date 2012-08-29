@@ -6,9 +6,11 @@ module VcrCable
 
   CONFIG_FILE = 'vcr_cable.yml'
   DEFAULT_CONFIG = {
-    'hook_into' => :fakeweb,
-    'cassette_library_dir' => 'development_cassettes',
-    'allow_http_connections_when_no_cassette' => true
+    'development' => {
+      'hook_into' => :fakeweb,
+      'cassette_library_dir' => 'development_cassettes',
+      'allow_http_connections_when_no_cassette' => true
+    }
   }
 
   def configure_vcr
@@ -20,13 +22,30 @@ module VcrCable
   end
 
   def config
-    @config ||= begin
-      config_file = Rails.root.join 'config', CONFIG_FILE
-      if File.file? config_file
-        YAML.load_file(config_file)[Rails.env]
-      else
-        DEFAULT_CONFIG
-      end
+    @config ||= global_config[env] || {}
+  end
+
+  def enabled?
+    config.present?
+  end
+
+  def reset_config
+    %w[global_config env_config config_file  config].each do |name|
+      instance_variable_set "@#{name}", nil
     end
+  end
+
+  def global_config
+    @global_config ||= File.file?(config_file) ? YAML.load_file(config_file) : DEFAULT_CONFIG
+  end
+
+  private
+
+  def env
+    Rails.env
+  end
+
+  def config_file
+    @config_file ||= Rails.root.join 'config', CONFIG_FILE
   end
 end
