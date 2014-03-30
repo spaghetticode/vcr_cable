@@ -26,7 +26,7 @@ module VcrCable
   end
 
   def enabled?
-    config.present?
+    config.present? && !config.fetch('disable_vcr_cable', false)
   end
 
   def reset_config
@@ -36,7 +36,7 @@ module VcrCable
   end
 
   def global_config
-    @global_config ||= File.file?(config_file) ? YAML.load_file(config_file) : DEFAULT_CONFIG
+    @global_config ||= File.file?(config_file) ? YAML.load(ERB.new(File.new(config_file).read).result) : DEFAULT_CONFIG
   end
 
   private
