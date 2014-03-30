@@ -13,6 +13,11 @@ class VcrCableTest < ActiveSupport::TestCase
     assert !VcrCable.enabled?
   end
 
+  test 'is not enabled when config disables it' do
+    VcrCable.stubs(:config).returns({'disable_vcr_cable' => true})
+    assert !VcrCable.enabled?
+  end
+
   test 'loads the default config when current env has configuration' do
     File.stubs(:file?).returns(false)
     VcrCable.stubs(:env).returns('development')
