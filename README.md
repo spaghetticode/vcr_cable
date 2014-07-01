@@ -14,7 +14,7 @@ Add required gems to your Gemfile:
 
 ```ruby
 gem 'vcr_cable'
-gem 'webmock' # or fakeweb
+gem 'fakeweb' # or webmock
 ```
 Now all external requests will hit the remote servers only one time, and the
 application will subsequently use the recorded data.
