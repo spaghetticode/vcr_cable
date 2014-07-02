@@ -18,6 +18,17 @@ class VcrCableTest < ActiveSupport::TestCase
     assert !VcrCable.enabled?
   end
 
+  test 'loads FakeWeb or WebMock based on which is installed' do
+    VcrCable.stubs(:env).returns('development')
+    assert_equal :fakeweb, VcrCable.config['hook_into']
+  end
+
+  test 'raises an error when no mocking library is available' do
+    VcrCable.stubs(:env).returns('development')
+    VcrCable.stubs(:gem_available?).returns(false)
+    assert_raises(VcrCable::InvalidMockingLibraryError) { VcrCable.config['hook_into'] }
+  end
+
   test 'has no config when the current env has no configuration' do
     assert !VcrCable.config.present?
   end
