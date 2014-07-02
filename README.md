@@ -14,8 +14,11 @@ Add required gems to your Gemfile:
 
 ```ruby
 gem 'vcr_cable'
-gem 'webmock' # or fakeweb
+gem 'fakeweb' # or webmock
 ```
+
+Fakeweb is the default fake request library, if you prefer to use webmock you still have to bundle it anyway until you generate the vcr config file and replace the default library with webmock.
+
 Now all external requests will hit the remote servers only one time, and the
 application will subsequently use the recorded data.
 

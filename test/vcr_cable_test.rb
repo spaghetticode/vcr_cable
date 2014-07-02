@@ -13,36 +13,44 @@ class VcrCableTest < ActiveSupport::TestCase
     assert !VcrCable.enabled?
   end
 
-  test 'loads the default config when current env has configuration' do
-    File.stubs(:file?).returns(false)
+  test 'is not enabled when config disables it' do
+    VcrCable.stubs(:config).returns({'disable_vcr_cable' => true})
+    assert !VcrCable.enabled?
+  end
+
+  test 'loads FakeWeb or WebMock based on which is installed' do
     VcrCable.stubs(:env).returns('development')
-    VcrCable.configure_vcr
-    assert_match /development_cassettes$/, VCR.configuration.cassette_library_dir
+    assert_equal :fakeweb, VcrCable.config['hook_into']
+  end
+
+  test 'raises an error when no mocking library is available' do
+    VcrCable.stubs(:env).returns('development')
+    VcrCable.stubs(:gem_available?).returns(false)
+    assert_raises(VcrCable::InvalidMockingLibraryError) { VcrCable.config['hook_into'] }
   end
 
   test 'has no config when the current env has no configuration' do
-    VcrCable.stubs(:env).returns('without_vcr_cable')
     assert !VcrCable.config.present?
   end
 
-  test 'config in config/vcr_cable.yml overwrites default values' do
+  test 'loads config from config/vcr_cable.yml over default values' do
+    VcrCable.stubs(:env).returns('development')
     VcrCable.configure_vcr
     assert_match /custom_named_cassettes$/, VCR.configuration.cassette_library_dir
   end
 
-  test 'global_config contains all env specific configs' do
-    %w[test development].each do |env_name|
-      VcrCable.global_config.keys.include?(env_name)
-    end
+  test 'loads default values when not specified in config/vcr_cable.yml' do
+    VcrCable.stubs(:env).returns('development')
+    VcrCable.configure_vcr
+    assert VcrCable.config['allow_http_connections_when_no_cassette']
   end
 
   test 'adds VCR::Middleware::Rack to the middleware stack' do
-    assert Rails.configuration.middleware.any? {|name| name == 'VCR::Middleware::Rack'}
+    list = Dir.chdir(Rails.root) {`bundle exec rake middleware RAILS_ENV=development`}
+    assert_match /VCR::Middleware::Rack/, list
   end
 
   test 'it does not add VCR::Middleware::Rack to environments that are not enabled' do
-    list = Dir.chdir(Rails.root) {`bundle exec rake middleware RAILS_ENV=no_vcr`}
-    assert_not_match /VCR::Middleware::Rack/, list
+    assert !Rails.configuration.middleware.any? {|name| name == 'VCR::Middleware::Rack'}
   end
-
 end
