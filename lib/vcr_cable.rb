@@ -9,7 +9,8 @@ module VcrCable
     'development' => {
       'hook_into' => :fakeweb,
       'cassette_library_dir' => 'development_cassettes',
-      'allow_http_connections_when_no_cassette' => true
+      'allow_http_connections_when_no_cassette' => true,
+      'disable_vcr_cable' => false
     }
   }
 
@@ -22,21 +23,25 @@ module VcrCable
   end
 
   def config
-    @config ||= global_config[env] || {}
+    @config ||= DEFAULT_CONFIG.fetch(env, {}).merge local_config.fetch(env, {})
   end
 
   def enabled?
-    config.present? && !config.fetch('disable_vcr_cable', false)
+    config.present? && !config['disable_vcr_cable']
   end
 
   def reset_config
-    %w[global_config env_config config_file  config].each do |name|
+    %w[local_config config_file config].each do |name|
       instance_variable_set "@#{name}", nil
     end
   end
 
-  def global_config
-    @global_config ||= File.file?(config_file) ? YAML.load(ERB.new(File.new(config_file).read).result) : DEFAULT_CONFIG
+  def local_config
+    @local_config ||= if File.file?(config_file)
+      YAML.load ERB.new(File.new(config_file).read).result
+    else
+      {}
+    end
   end
 
   private
