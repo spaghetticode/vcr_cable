@@ -9,8 +9,7 @@ module VcrCable
   DEFAULT_CONFIG = {
     'development' => {
       'cassette_library_dir' => 'development_cassettes',
-      'allow_http_connections_when_no_cassette' => true,
-      'disable_vcr_cable' => false
+      'allow_http_connections_when_no_cassette' => true
     }
   }
 
@@ -28,6 +27,10 @@ module VcrCable
 
   def enabled?
     config.present? && !config['disable_vcr_cable']
+  end
+
+  def disabled_by_env?
+    %w(true 1).include?(ENV['DISABLE_VCR_CABLE'])
   end
 
   def reset_config
@@ -56,7 +59,10 @@ module VcrCable
 
   def default_config
     @default_config ||= if DEFAULT_CONFIG.has_key? env
-      DEFAULT_CONFIG[env].merge({ 'hook_into' => select_default_mocking_library })
+      DEFAULT_CONFIG[env].merge({
+        'hook_into' => select_default_mocking_library,
+        'disable_vcr_cable' => disabled_by_env?
+      })
     else
       {}
     end

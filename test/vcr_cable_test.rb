@@ -18,6 +18,11 @@ class VcrCableTest < ActiveSupport::TestCase
     assert !VcrCable.enabled?
   end
 
+  test 'is not enabled when DISABLE_VCR_CABLE is present in ENV' do
+    ENV.stubs(:[]).with('DISABLE_VCR_CABLE').returns(true)
+    assert !VcrCable.enabled?
+  end
+
   test 'loads FakeWeb or WebMock based on which is installed' do
     VcrCable.stubs(:env).returns('development')
     assert_equal :fakeweb, VcrCable.config['hook_into']
