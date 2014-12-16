@@ -23,6 +23,16 @@ class VcrCableTest < ActiveSupport::TestCase
     assert !VcrCable.enabled?
   end
 
+  test 'erb is not enabled when config disables it' do
+    VcrCable.stubs(:config).returns({'enable_erb' => false})
+    assert !VcrCable.config['enable_erb']
+  end
+
+  test 'erb is enabled when config enables it' do
+    VcrCable.stubs(:config).returns({'enable_erb' => true})
+    assert VcrCable.config['enable_erb']
+  end
+
   test 'loads FakeWeb or WebMock based on which is installed' do
     VcrCable.stubs(:env).returns('development')
     assert_equal :fakeweb, VcrCable.config['hook_into']
