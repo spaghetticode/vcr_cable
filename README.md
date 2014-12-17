@@ -29,6 +29,7 @@ The default VCR configuration is:
 development:
   hook_into: fakeweb
   cassette_library_dir: development_cassettes
+  enable_erb: false
   allow_http_connections_when_no_cassette: true
   disable_vcr_cable: false
 ```
