@@ -33,6 +33,16 @@ class VcrCableTest < ActiveSupport::TestCase
     assert VcrCable.config['enable_erb']
   end
 
+  test 'allow_playback_repeats is not enabled when config disables it' do
+    VcrCable.stubs(:config).returns({'allow_playback_repeats' => false})
+    assert !VcrCable.config['allow_playback_repeats']
+  end
+
+  test 'allow_playback_repeats is enabled when config enables it' do
+    VcrCable.stubs(:config).returns({'allow_playback_repeats' => true})
+    assert VcrCable.config['allow_playback_repeats']
+  end
+
   test 'loads FakeWeb or WebMock based on which is installed' do
     VcrCable.stubs(:env).returns('development')
     assert_equal :fakeweb, VcrCable.config['hook_into']
