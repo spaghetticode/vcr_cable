@@ -9,14 +9,18 @@ module VcrCable
   DEFAULT_CONFIG = {
     'development' => {
       'cassette_library_dir' => 'development_cassettes',
-      'allow_http_connections_when_no_cassette' => true
+      'allow_http_connections_when_no_cassette' => true,
+      'allow_playback_repeats' => false
     }
   }
 
   def configure_vcr
     VCR.configure do |c|
       c.hook_into config['hook_into']
-      c.default_cassette_options = { :erb => config['enable_erb'] }
+      c.default_cassette_options = {
+         :erb => config['enable_erb'],
+         :allow_playback_repeats => config['allow_playback_repeats']
+      }
       c.cassette_library_dir = config['cassette_library_dir']
       c.allow_http_connections_when_no_cassette = config['allow_http_connections_when_no_cassette']
     end
