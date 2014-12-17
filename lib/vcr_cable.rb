@@ -16,6 +16,7 @@ module VcrCable
   def configure_vcr
     VCR.configure do |c|
       c.hook_into config['hook_into']
+      c.default_cassette_options = { :erb => config['enable_erb'] }
       c.cassette_library_dir = config['cassette_library_dir']
       c.allow_http_connections_when_no_cassette = config['allow_http_connections_when_no_cassette']
     end
