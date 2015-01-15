@@ -44,7 +44,22 @@ bundle exec rails generate vcr_cable
 
 The file will be located in the ```config``` folder of your rails application.
 
-You can also disable vcr_cable by setting `DISABLE_VCR_CABLE=true` in your environment. This would allow each developer to opt into or out of vcr_cable on his/her own machine, for example.
+## Config via env
+
+You can also enable/disable vcr_cable by setting `ENABLE_VCR_CABLE=true` or `ENABLE_VCR_CABLE=false` in your environment. This would allow each developer to opt into or out of vcr_cable on his/her own machine, for example.
+
+## Extra
+
+If you use `vcr_cable` in development env I recommend enable http requests for webmock or fakeweb. Just create an initializer, for example:
+
+```ruby
+# config/initializers/webmock.rb
+
+WebMock.allow_net_connect!
+
+```
+
+It will prevent exceptions when you disable `vcr_cable`.
 
 ## Contributing
 
