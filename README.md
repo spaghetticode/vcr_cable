@@ -19,13 +19,13 @@ gem 'fakeweb' # or webmock
 
 *Note: You can choose between the FakeWeb and WebMock gems for faking web requests. If one of those gems is already loaded by your application it will be used automatically.*
 
-By default `vcr_cable` is disabled. So for launch it you need to run server with ENV variable `ENABLE_VCR_CABLE=true` like this:
+By default `vcr_cable` is disabled. In order to enable it you need to start the server with the ENV variable `ENABLE_VCR_CABLE=true` like this:
 
 ```bash
 ENABLE_VCR_CABLE=true bundle exec rails s
 ```
 
-Or you can enable `vcr_cable` in yaml config per environment (check out section below).
+Or you can enable `vcr_cable` in the yaml config file (check the section below).
 
 That's it! Now all external requests will hit the remote servers only one time, and the application will subsequently use the recorded data.
 
@@ -43,7 +43,7 @@ development:
   enable_vcr_cable: false
 ```
 
-If you want to override those values or configure vcr_cable to work in some
+If you want to override those values or configure `vcr_cable` to work in some
 other environment you can generate the `vcr_cable.yml` config file and update it:
 
 ```bash
@@ -54,11 +54,11 @@ The file will be located in the ```config``` folder of your rails application.
 
 ## Config via env
 
-You can also enable/disable vcr_cable by setting `ENABLE_VCR_CABLE=true` or `ENABLE_VCR_CABLE=false` in your environment. This would allow each developer to opt into or out of vcr_cable on his/her own machine, for example.
+You can also enable/disable vcr_cable by setting `ENABLE_VCR_CABLE=true` or `ENABLE_VCR_CABLE=false` in your environment. This allows each developer to opt in or opt out for vcr_cable on their own machine.
 
 ## Extra
 
-If you use `vcr_cable` in development env I recommend enable http requests for webmock or fakeweb. Just create an initializer, for example:
+If you use `vcr_cable` in development I recommend to enable http requests for webmock or fakeweb. Just create an initializer, for example:
 
 ```ruby
 WebMock.allow_net_connect! if defined? WebMock
