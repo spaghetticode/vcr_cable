@@ -3,23 +3,27 @@ require 'test_helper'
 class VcrCableTest < ActiveSupport::TestCase
   setup { VcrCable.reset_config }
 
-  test 'is enabled when config is present' do
-    VcrCable.stubs(:config).returns({:some => :conf})
+  test 'is disabled by default' do
+    assert !VcrCable.enabled?
+  end
+
+  test 'is enabled when config enables it' do
+    VcrCable.stubs(:config).returns({'enable_vcr_cable' => true})
     assert VcrCable.enabled?
   end
 
-  test 'is not enabled when config is not present' do
-    VcrCable.stubs(:config).returns({})
-    assert !VcrCable.enabled?
-  end
-
   test 'is not enabled when config disables it' do
-    VcrCable.stubs(:config).returns({'disable_vcr_cable' => true})
+    VcrCable.stubs(:config).returns({'enable_vcr_cable' => false})
     assert !VcrCable.enabled?
   end
 
-  test 'is not enabled when DISABLE_VCR_CABLE is present in ENV' do
-    ENV.stubs(:[]).with('DISABLE_VCR_CABLE').returns(true)
+  test 'is enabled when ENABLE_VCR_CABLE is present in ENV and set to true' do
+    ENV['ENABLE_VCR_CABLE'] = 'true'
+    assert VcrCable.enabled?
+  end
+
+  test 'is not enabled when ENABLE_VCR_CABLE is present in ENV and set to false' do
+    ENV['ENABLE_VCR_CABLE'] = 'false'
     assert !VcrCable.enabled?
   end
 
@@ -71,7 +75,7 @@ class VcrCableTest < ActiveSupport::TestCase
   end
 
   test 'adds VCR::Middleware::Rack to the middleware stack' do
-    list = Dir.chdir(Rails.root) {`bundle exec rake middleware RAILS_ENV=development`}
+    list = Dir.chdir(Rails.root) {`bundle exec rake middleware RAILS_ENV=development ENABLE_VCR_CABLE=true`}
     assert_match /VCR::Middleware::Rack/, list
   end
 

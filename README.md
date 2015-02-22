@@ -19,6 +19,14 @@ gem 'fakeweb' # or webmock
 
 *Note: You can choose between the FakeWeb and WebMock gems for faking web requests. If one of those gems is already loaded by your application it will be used automatically.*
 
+By default `vcr_cable` is disabled. So for launch it you need to run server with ENV variable `ENABLE_VCR_CABLE=true` like this:
+
+```bash
+ENABLE_VCR_CABLE=true bundle exec rails s
+```
+
+Or you can enable `vcr_cable` in yaml config per environment (check out section below).
+
 That's it! Now all external requests will hit the remote servers only one time, and the application will subsequently use the recorded data.
 
 ## Custom VCR Configuration
@@ -32,7 +40,7 @@ development:
   enable_erb: false
   allow_playback_repeats: false
   allow_http_connections_when_no_cassette: true
-  disable_vcr_cable: false
+  enable_vcr_cable: false
 ```
 
 If you want to override those values or configure vcr_cable to work in some
@@ -44,7 +52,19 @@ bundle exec rails generate vcr_cable
 
 The file will be located in the ```config``` folder of your rails application.
 
-You can also disable vcr_cable by setting `DISABLE_VCR_CABLE=true` in your environment. This would allow each developer to opt into or out of vcr_cable on his/her own machine, for example.
+## Config via env
+
+You can also enable/disable vcr_cable by setting `ENABLE_VCR_CABLE=true` or `ENABLE_VCR_CABLE=false` in your environment. This would allow each developer to opt into or out of vcr_cable on his/her own machine, for example.
+
+## Extra
+
+If you use `vcr_cable` in development env I recommend enable http requests for webmock or fakeweb. Just create an initializer, for example:
+
+```ruby
+WebMock.allow_net_connect! if defined? WebMock
+```
+
+It will prevent exceptions when you disable `vcr_cable`.
 
 ## Contributing
 
