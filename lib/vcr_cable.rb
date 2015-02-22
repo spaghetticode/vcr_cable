@@ -27,19 +27,19 @@ module VcrCable
   end
 
   def config
-    @config ||= default_config.merge local_config
+    @config ||= default_config.merge(local_config).merge(env_config)
   end
 
   def enabled?
-    config.present? && !config['disable_vcr_cable']
+    config.present? && config['enable_vcr_cable']
   end
 
-  def disabled_by_env?
-    %w(true 1).include?(ENV['DISABLE_VCR_CABLE'])
+  def enabled_by_env?
+    %w(true 1).include?(ENV['ENABLE_VCR_CABLE']).presence
   end
 
   def reset_config
-    %w[local_config config_file default_config config].each do |name|
+    %w[local_config config_file default_config env_config config].each do |name|
       instance_variable_set "@#{name}", nil
     end
   end
@@ -66,11 +66,16 @@ module VcrCable
     @default_config ||= if DEFAULT_CONFIG.has_key? env
       DEFAULT_CONFIG[env].merge({
         'hook_into' => select_default_mocking_library,
-        'disable_vcr_cable' => disabled_by_env?
       })
     else
       {}
     end
+  end
+
+  def env_config
+    @env_config ||= {
+      'enable_vcr_cable' => enabled_by_env?,
+    }.select { |_, value| !value.nil? }
   end
 
   def select_default_mocking_library
