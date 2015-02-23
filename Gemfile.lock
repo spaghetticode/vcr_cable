@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    vcr_cable (0.3.0)
+    vcr_cable (1.0.0)
       rails
       vcr
 
